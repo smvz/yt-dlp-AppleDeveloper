@@ -22,3 +22,7 @@ git clone https://github.com/quaqsim/yt-dlp-AppleDeveloper.git ~/.yt-dlp/plugins
 ```
 
 See [installing yt-dlp plugins](https://github.com/yt-dlp/yt-dlp#installing-plugins) for the other methods this plugin package can be installed.
+
+## TODO
+
+ * Handle unknown audio better, if possible. Try to detect or infer audio codec and other details rather than treat as aac.
