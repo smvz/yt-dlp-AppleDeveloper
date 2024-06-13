@@ -81,13 +81,13 @@ class _AppleWwdcBaseIE(InfoExtractor):
     def playlist_title(self, url, webpage):
         raise NotImplementedError('This method must be implemented by subclasses')
 
-    def _real_extract(self, url):
+    def extract_with_regular_expression(self, url, regexp):
         playlist_id = self.playlist_id(url)
         webpage = self._download_webpage(url, playlist_id)
 
         video_urls = [
             urljoin(self._BASE_URL, path)
-            for path in re.findall(r'<a[^>]+href="(/videos/play/[^"]+)"', webpage)
+            for path in re.findall(regexp, webpage)
         ]
         video_urls = list(dict.fromkeys(video_urls))
 
@@ -97,6 +97,9 @@ class _AppleWwdcBaseIE(InfoExtractor):
         ]
 
         return self.playlist_result(entries, playlist_id, self.playlist_title(url, webpage))
+
+    def _real_extract(self, url):
+        raise NotImplementedError('This method must be implemented by subclasses')
 
 
 class AppleWwdcSessionsIE(_AppleWwdcBaseIE):
@@ -117,6 +120,9 @@ class AppleWwdcSessionsIE(_AppleWwdcBaseIE):
     def playlist_title(self, url, webpage):
         return '%s sessions' % self._match_valid_url(url).group('category')
 
+    def _real_extract(self, url):
+        return self.extract_with_regular_expression(url, r'<a[^>]+href="(/videos/play/[^"]+)"')
+
 
 class AppleWwdcTopicsIE(_AppleWwdcBaseIE):
     _VALID_URL = r'https?://developer.apple.com/(?P<category>[-\w]+)/topics/(?P<topic>[-\w]+)'
@@ -135,3 +141,28 @@ class AppleWwdcTopicsIE(_AppleWwdcBaseIE):
 
     def playlist_title(self, url, webpage):
         return '%s' % self._generic_title(url, webpage)
+
+    def _real_extract(self, url):
+        return self.extract_with_regular_expression(url, r'<a[^>]+href="(/videos/play/[^"]+)"')
+
+
+class AppleWwdcNewsIE(_AppleWwdcBaseIE):
+    _VALID_URL = r'https?://developer.apple.com/news/\?id=(?P<news>[-\w]+)'
+    _TESTS = [{
+        'url': 'https://developer.apple.com/news/?id=pby7a6ex',
+        'info_dict': {
+            'id': 'pby7a6ex',
+            'title': 'WWDC24 Machine Learning & AI guide - Discover - Apple Developer',
+            'playlist_count': 15
+        },
+        'skip': 'WWDC changes every year'
+    }]
+
+    def playlist_id(self, url):
+        return self._match_valid_url(url).group('news')
+
+    def playlist_title(self, url, webpage):
+        return '%s' % self._generic_title(url, webpage)
+
+    def _real_extract(self, url):
+        return self.extract_with_regular_expression(url, r'<a[^>]+href="(https://developer.apple.com/(?:[-\w]+)/(?:\d+)[^"]+)"')
