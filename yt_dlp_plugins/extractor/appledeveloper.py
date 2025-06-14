@@ -157,7 +157,6 @@ class AppleDeveloperIE(InfoExtractor):
 
     def _real_extract(self, url):
         video_id = f'{self._match_valid_url(url).group('category')}-{self._match_id(url)}'
-        print(video_id)
         webpage = self._download_webpage(url, video_id)
         video_url = self._og_search_video_url(webpage, default=None)
         if not video_url:
