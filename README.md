@@ -12,13 +12,13 @@ Requires yt-dlp `2023.03.04` or above.
 
 You can install this package with pip:
 ```
-python3 -m pip install -U https://github.com/quaqsim/yt-dlp-AppleDeveloper/archive/main.zip
+python3 -m pip install -U https://github.com/smvz/yt-dlp-AppleDeveloper/archive/main.zip
 ```
 
 Alternatively, the repository can be cloned to your user's plugin directory:
 ```
 mkdir -p ~/.yt-dlp/plugins
-git clone https://github.com/quaqsim/yt-dlp-AppleDeveloper.git ~/.yt-dlp/plugins/appledeveloper
+git clone https://github.com/smvz/yt-dlp-AppleDeveloper.git ~/.yt-dlp/plugins/appledeveloper
 ```
 
 See [installing yt-dlp plugins](https://github.com/yt-dlp/yt-dlp#installing-plugins) for the other methods this plugin package can be installed.
